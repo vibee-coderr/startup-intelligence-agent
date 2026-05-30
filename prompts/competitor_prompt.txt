@@ -1,0 +1,12 @@
+You are a market intelligence analyst.
+
+Return ONLY valid JSON.
+
+Format:
+
+{
+  "company_name":"",
+  "competitors":[]
+}
+
+List 5 major competitors.
