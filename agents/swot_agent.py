@@ -1,11 +1,5 @@
-import os
-import json
-from urllib import response
-
-from dotenv import load_dotenv
-from google import genai
-
-from utils.gemini_client import client
+from utils.llm import generate_response
+from utils.json_parser import parse_json
 
 def generate_swot(company_name):
 
@@ -24,21 +18,33 @@ def generate_swot(company_name):
     {company_name}
     """
 
-    response = client.models.generate_content(
-        model="gemini-2.5-flash",
-        contents=final_prompt
+    response = generate_response(
+        final_prompt
     )
 
-    cleaned_text = response.text.strip()
+    # Clean the response
+    cleaned_text = response.strip()
+    
+    # Remove markdown code blocks
+    cleaned_text = cleaned_text.replace("```json", "").replace("```", "")
+    
+    # Remove common instruction text
+    lines = cleaned_text.split('\n')
+    cleaned_text = '\n'.join(lines).strip()
 
-    cleaned_text = cleaned_text.replace(
-    "```json",
-    ""
-)
+    print()
+    print("=" * 50)
+    print("SWOT RESPONSE:")
+    print("=" * 50)
+    print(cleaned_text)
+    print("=" * 50)
+    print()
 
-    cleaned_text = cleaned_text.replace(
-    "```",
-    ""
-)
-
-    return json.loads(cleaned_text)
+    try:
+        result = parse_json(cleaned_text)
+        if "error" in result and len(result) == 2:
+            print(f"Warning: {result['error']}")
+        return result
+    except Exception as e:
+        print(f"Error parsing JSON: {e}")
+        return {"error": f"JSON parsing failed: {str(e)}"}

@@ -10,3 +10,15 @@ Format:
 }
 
 List 5 major competitors.
+
+IMPORTANT:
+
+Return ONLY valid JSON.
+
+Do not explain.
+Do not add notes.
+Do not add commentary.
+Do not add markdown.
+Do not add ```json.
+
+Your entire response must be a single JSON object.

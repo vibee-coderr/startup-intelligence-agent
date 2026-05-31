@@ -1,4 +1,4 @@
-from utils.gemini_client import client
+from utils.llm import generate_response
 
 def generate_report(
     analysis_data,
@@ -27,9 +27,4 @@ def generate_report(
     {swot_data}
     """
 
-    response = client.models.generate_content(
-        model="gemini-2.5-flash",
-        contents=final_prompt
-    )
-
-    return response.text
+    return generate_response(final_prompt)
