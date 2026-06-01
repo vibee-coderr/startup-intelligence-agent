@@ -95,171 +95,221 @@ if mode == "Single Company Analysis":
         st.subheader("📝 Executive Report")
         st.write(final_report)
 
-else:  # Company Comparison mode
-    
+# Company Comparison Mode
+
+else:
+
     col1, col2 = st.columns(2)
 
     with col1:
-        company1 = st.text_input("Enter First Company Name", key="company1")
+        company1 = st.text_input(
+            "Enter First Company Name",
+            key="company1"
+        )
 
     with col2:
-        company2 = st.text_input("Enter Second Company Name", key="company2")
+        company2 = st.text_input(
+            "Enter Second Company Name",
+            key="company2"
+        )
 
     if st.button("Compare"):
-        
+
         if not company1 or not company2:
-            st.error("Please enter both company names")
+            st.error(
+                "Please enter both company names"
+            )
+
         else:
 
-            with st.spinner("Analyzing both companies and generating comparison..."):
+            with st.spinner(
+                "Analyzing companies..."
+            ):
 
-                # Analyze Company 1
-                analysis1 = analyze_company(company1)
-                competitor1 = find_competitors(company1)
-                swot1 = generate_swot(company1)
+                try:
 
-                # Analyze Company 2
-                analysis2 = analyze_company(company2)
-                competitor2 = find_competitors(company2)
-                swot2 = generate_swot(company2)
+                    analysis1 = analyze_company(company1)
+                    analysis2 = analyze_company(company2)
 
-                # Generate comparison
-                comparison = generate_comparison(
-                    company1, analysis1, competitor1, swot1,
-                    company2, analysis2, competitor2, swot2
-                )
+                    competitors1 = find_competitors(company1)
+                    competitors2 = find_competitors(company2)
 
-            st.success("Comparison Complete")
+                    swot1 = generate_swot(company1)
+                    swot2 = generate_swot(company2)
+
+                    comparison = generate_comparison(
+                        company1,
+                        analysis1,
+                        company2,
+                        analysis2
+                    )
+
+                except Exception as e:
+
+                    st.error(
+                        f"Error: {e}"
+                    )
+
+                    st.stop()
+
+            st.success(
+                "Comparison Complete"
+            )
 
             st.divider()
-
-            # Side-by-side comparison
-            st.subheader("📊 Side-by-Side Comparison")
 
             col1, col2 = st.columns(2)
 
             with col1:
-                st.markdown(f"### {company1}")
-                
-                st.markdown("**Overview**")
-                st.write(analysis1.get("overview", "N/A"))
-                
-                st.markdown("**Products**")
-                for product in analysis1.get("products", []):
-                    st.write(f"• {product}")
-                
-                st.markdown("**Revenue Sources**")
-                for source in analysis1.get("revenue_sources", []):
-                    st.write(f"• {source}")
-                
-                st.markdown("**Competitors**")
-                for competitor in competitor1.get("competitors", []):
+
+                st.subheader(company1)
+
+                st.write(
+                    analysis1.get(
+                        "overview",
+                        "No overview available"
+                    )
+                )
+
+                st.markdown(
+                    "### Products"
+                )
+
+                for product in analysis1.get(
+                    "products",
+                    []
+                ):
+                    st.write(
+                        f"• {product}"
+                    )
+
+                st.markdown(
+                    "### Revenue Sources"
+                )
+
+                for source in analysis1.get(
+                    "revenue_sources",
+                    []
+                ):
+                    st.write(
+                        f"• {source}"
+                    )
+
+                st.markdown(
+                    "### Investment Summary"
+                )
+
+                st.write(
+                    analysis1.get(
+                        "investment_summary",
+                        "N/A"
+                    )
+                )
+
+                st.markdown("### Competitors")
+
+                for competitor in competitors1.get(
+                    "competitors",
+                    []
+                ):
                     st.write(f"• {competitor}")
 
-            with col2:
-                st.markdown(f"### {company2}")
-                
-                st.markdown("**Overview**")
-                st.write(analysis2.get("overview", "N/A"))
-                
-                st.markdown("**Products**")
-                for product in analysis2.get("products", []):
-                    st.write(f"• {product}")
-                
-                st.markdown("**Revenue Sources**")
-                for source in analysis2.get("revenue_sources", []):
-                    st.write(f"• {source}")
-                
-                st.markdown("**Competitors**")
-                for competitor in competitor2.get("competitors", []):
-                    st.write(f"• {competitor}")
+                st.markdown("### SWOT")
 
-            st.divider()
+                swot = swot1.get("swot", swot1)
 
-            # SWOT Comparison
-            st.subheader("📈 SWOT Analysis Comparison")
-
-            col1, col2 = st.columns(2)
-
-            with col1:
-                st.markdown(f"### {company1} SWOT")
-                swot = swot1.get("swot", {})
-                
-                st.markdown("**Strengths**")
+                st.markdown("#### Strengths")
                 for item in swot.get("strengths", []):
                     st.write(f"• {item}")
-                
-                st.markdown("**Weaknesses**")
+
+                st.markdown("#### Weaknesses")
                 for item in swot.get("weaknesses", []):
                     st.write(f"• {item}")
-                
-                st.markdown("**Opportunities**")
+
+                st.markdown("#### Opportunities")
                 for item in swot.get("opportunities", []):
                     st.write(f"• {item}")
-                
-                st.markdown("**Threats**")
+
+                st.markdown("#### Threats")
                 for item in swot.get("threats", []):
                     st.write(f"• {item}")
 
             with col2:
-                st.markdown(f"### {company2} SWOT")
-                swot = swot2.get("swot", {})
-                
-                st.markdown("**Strengths**")
+
+                st.subheader(company2)
+
+                st.write(
+                    analysis2.get(
+                        "overview",
+                        "No overview available"
+                    )
+                )
+
+                st.markdown(
+                    "### Products"
+                )
+
+                for product in analysis2.get(
+                    "products",
+                    []
+                ):
+                    st.write(
+                        f"• {product}"
+                    )
+
+                st.markdown(
+                    "### Revenue Sources"
+                )
+
+                for source in analysis2.get(
+                    "revenue_sources",
+                    []
+                ):
+                    st.write(
+                        f"• {source}"
+                    )
+
+                st.markdown(
+                    "### Investment Summary"
+                )
+
+                st.write(
+                    analysis2.get(
+                        "investment_summary",
+                        "N/A"
+                    )
+                )
+
+                st.markdown("### Competitors")
+
+                for competitor in competitors2.get(
+                    "competitors",
+                    []
+                ):
+                    st.write(f"• {competitor}")
+
+                st.markdown("### SWOT")
+
+                swot = swot2.get("swot", swot2)
+
+                st.markdown("#### Strengths")
                 for item in swot.get("strengths", []):
                     st.write(f"• {item}")
-                
-                st.markdown("**Weaknesses**")
+
+                st.markdown("#### Weaknesses")
                 for item in swot.get("weaknesses", []):
                     st.write(f"• {item}")
-                
-                st.markdown("**Opportunities**")
+
+                st.markdown("#### Opportunities")
                 for item in swot.get("opportunities", []):
                     st.write(f"• {item}")
-                
-                st.markdown("**Threats**")
+
+                st.markdown("#### Threats")
                 for item in swot.get("threats", []):
                     st.write(f"• {item}")
 
             st.divider()
 
-            # Comparison Verdict
-            st.subheader("🏆 Comparison Verdict")
-
-            col1, col2, col3, col4 = st.columns(4)
-
-            with col1:
-                innovation = comparison.get("innovation_winner", {})
-                st.metric(
-                    "Innovation Winner",
-                    innovation.get("company", "N/A"),
-                    f"Score: {innovation.get('score', 'N/A')}"
-                )
-                st.write(innovation.get("reason", ""))
-
-            with col2:
-                market = comparison.get("market_position_winner", {})
-                st.metric(
-                    "Market Position Winner",
-                    market.get("company", "N/A"),
-                    f"Score: {market.get('score', 'N/A')}"
-                )
-                st.write(market.get("reason", ""))
-
-            with col3:
-                growth = comparison.get("growth_potential_winner", {})
-                st.metric(
-                    "Growth Potential Winner",
-                    growth.get("company", "N/A"),
-                    f"Score: {growth.get('score', 'N/A')}"
-                )
-                st.write(growth.get("reason", ""))
-
-            with col4:
-                overall = comparison.get("overall_winner", {})
-                st.metric(
-                    "Overall Winner",
-                    overall.get("company", "N/A"),
-                    f"Score: {overall.get('score', 'N/A')}"
-                )
-                st.write(overall.get("reason", ""))
+            st.markdown("### 🏆 Comparison Verdict")
+            st.markdown(comparison)
+            
