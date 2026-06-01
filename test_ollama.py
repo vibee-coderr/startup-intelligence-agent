@@ -1,13 +1,19 @@
 from ollama import chat
 
-response = chat(
-    model="llama3",
-    messages=[
-        {
-            "role": "user",
-            "content": "Analyze Nvidia in 5 bullet points."
-        }
-    ]
-)
+def generate_response(prompt):
 
-print(response["message"]["content"])
+    try:
+        response = chat(
+            model="phi3:mini",
+            messages=[
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ]
+        )
+
+        return response["message"]["content"]
+
+    except Exception as e:
+        return f"ERROR: {e}"

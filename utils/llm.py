@@ -9,7 +9,10 @@ def generate_response(prompt):
                 "role": "user",
                 "content": prompt
             }
-        ]
+        ],
+        options={
+            "temperature": 0
+        }
     )
 
     return response["message"]["content"]

@@ -1,24 +1,23 @@
-You are a market intelligence analyst.
-
 Return ONLY valid JSON.
 
-Format:
+Schema:
 
 {
-  "company_name":"",
-  "competitors":[]
+  "company_name": "",
+  "competitors": [
+    "",
+    "",
+    "",
+    "",
+    ""
+  ]
 }
 
-List 5 major competitors.
-
-IMPORTANT:
-
-Return ONLY valid JSON.
-
-Do not explain.
-Do not add notes.
-Do not add commentary.
-Do not add markdown.
-Do not add ```json.
-
-Your entire response must be a single JSON object.
+Rules:
+- Exactly 5 competitors.
+- No explanations.
+- No notes.
+- No markdown.
+- No text before JSON.
+- No text after JSON.
+- Output must start with { and end with }.
