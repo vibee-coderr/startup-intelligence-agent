@@ -5,6 +5,7 @@ from agents.competitor_agent import find_competitors
 from agents.swot_agent import generate_swot
 from agents.report_agent import generate_report
 from agents.comparison_agent import generate_comparison
+from utils.pdf_generator import generate_pdf_report, generate_comparison_pdf_report
 
 st.set_page_config(
     page_title="AI Startup Intelligence Agent",
@@ -95,7 +96,23 @@ if mode == "Single Company Analysis":
         st.subheader("📝 Executive Report")
         st.write(final_report)
 
-# Company Comparison Mode
+        st.divider()
+
+        # PDF Download Button
+        pdf_buffer = generate_pdf_report(
+            company,
+            analysis_data,
+            competitor_data,
+            swot_data,
+            final_report
+        )
+        
+        st.download_button(
+            label="📄 Download PDF Report",
+            data=pdf_buffer,
+            file_name=f"{company}_Analysis_Report.pdf",
+            mime="application/pdf"
+        )
 
 else:
 
@@ -312,4 +329,64 @@ else:
 
             st.markdown("### 🏆 Comparison Verdict")
             st.markdown(comparison)
+
+            st.divider()
+
+            # PDF Download Buttons for Comparison
+            col1, col2, col3 = st.columns(3)
+
+            with col1:
+                # Download individual report for Company 1
+                pdf_buffer1 = generate_pdf_report(
+                    company1,
+                    analysis1,
+                    competitors1,
+                    swot1,
+                    ""
+                )
+                
+                st.download_button(
+                    label=f"📄 {company1} PDF Report",
+                    data=pdf_buffer1,
+                    file_name=f"{company1}_Analysis_Report.pdf",
+                    mime="application/pdf"
+                )
+
+            with col2:
+                # Download individual report for Company 2
+                pdf_buffer2 = generate_pdf_report(
+                    company2,
+                    analysis2,
+                    competitors2,
+                    swot2,
+                    ""
+                )
+                
+                st.download_button(
+                    label=f"📄 {company2} PDF Report",
+                    data=pdf_buffer2,
+                    file_name=f"{company2}_Analysis_Report.pdf",
+                    mime="application/pdf"
+                )
+
+            with col3:
+                # Download combined comparison report
+                comparison_pdf = generate_comparison_pdf_report(
+                    company1,
+                    analysis1,
+                    competitors1,
+                    swot1,
+                    company2,
+                    analysis2,
+                    competitors2,
+                    swot2,
+                    comparison
+                )
+                
+                st.download_button(
+                    label="📊 Comparison Report",
+                    data=comparison_pdf,
+                    file_name=f"{company1}_vs_{company2}_Comparison.pdf",
+                    mime="application/pdf"
+                )
             
